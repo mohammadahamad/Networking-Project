@@ -9,13 +9,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
-    --bg-main: #CAFADD; /* Vert très clair / Menthe pour le fond général */
-    --primary: #06845E; /* Vert vif */
-    --primary-dark: #004323; /* Vert profond */
-    --secondary: #45598E; /* Bleu de la charte */
-    --card-bg: #ffffff; /* Blanc */
-    --text-main: #004323; /* Lisibilité max sur fond clair */
-    --text-muted: #45598E; 
+    --bg-main: #CAFADD;
+    --primary: #06845E;
+    --primary-dark: #004323;
+    --secondary: #45598E;
+    --card-bg: #ffffff;
+    --text-main: #004323;
+    --text-muted: #45598E;
     --border: rgba(69, 89, 142, 0.15);
     --radius: 12px;
     --radius-sm: 6px;
@@ -34,18 +34,18 @@
 
   /* HEADER */
   header {
-  padding: 4rem 4rem 3rem;
-  background: url('/soiree_networking.png') center/cover no-repeat;
-  color: var(--card-bg);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  border-bottom-left-radius: 32px;
-  border-bottom-right-radius: 32px;
-  box-shadow: 0 10px 30px rgba(0, 67, 35, 0.15);
-  position: relative;
-  height: 40vh;
-}
+    padding: 4rem 4rem 3rem;
+    background: url('/soiree_networking.png') center/cover no-repeat;
+    color: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    box-shadow: 0 10px 30px rgba(0, 67, 35, 0.15);
+    position: relative;
+    height: 40vh;
+  }
 
   .logo {
     font-weight: 700;
@@ -115,9 +115,14 @@
     overflow: hidden;
   }
 
-  .card:hover { 
+  .card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 30px rgba(0, 67, 35, 0.12);
+  }
+
+  /* Card complet */
+  .card.is-full {
+    border-color: rgba(176, 58, 46, 0.2);
   }
 
   .card-tag {
@@ -175,12 +180,24 @@
     font-weight: 600;
   }
 
+  .count-badge {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .count-badge span {
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .count-badge.full span {
+    color: #B03A2E;
+  }
+
   .attendees-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    min-height: 60px;
-    flex: 1;
   }
 
   .attendee {
@@ -208,17 +225,29 @@
     opacity: 0.8;
   }
 
-  .count-badge {
+  /* BOUTON VOIR PLUS */
+  .btn-voir-plus {
+    background: none;
+    border: none;
+    color: var(--secondary);
+    font-family: 'Montserrat', sans-serif;
     font-size: 12px;
-    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 6px 0;
+    text-align: left;
+    transition: color 0.2s;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
-  .count-badge span {
-    font-weight: 700;
+  .btn-voir-plus:hover {
     color: var(--primary);
   }
 
-  /* BUTTON */
+  /* BUTTON INSCRIPTION */
   .btn-register {
     border: 2px solid var(--primary);
     background: transparent;
@@ -258,9 +287,18 @@
     opacity: 0.4;
     cursor: not-allowed;
     box-shadow: none !important;
+    border-color: #B03A2E;
+    color: #B03A2E;
+    background: rgba(176, 58, 46, 0.05);
   }
 
-  /* OVERLAY */
+  .btn-register.complet {
+    border-color: #B03A2E;
+    color: #B03A2E;
+    background: rgba(176, 58, 46, 0.05);
+  }
+
+  /* ====== OVERLAY GÉNÉRIQUE ====== */
   .overlay {
     display: none;
     position: fixed;
@@ -274,6 +312,7 @@
 
   .overlay.active { display: flex; }
 
+  /* ====== MODAL INSCRIPTION ====== */
   .modal {
     background: var(--card-bg);
     width: 460px;
@@ -377,8 +416,8 @@
     width: 100%;
   }
 
-  .field input:focus { 
-    border-color: var(--primary); 
+  .field input:focus {
+    border-color: var(--primary);
     background: #ffffff;
     box-shadow: 0 0 0 4px rgba(6, 132, 94, 0.1);
   }
@@ -517,20 +556,6 @@
   }
   .btn-cal-outlook:hover { background: #005fa3; border-color: #005fa3; }
 
-  .btn-cal-google {
-    background: white;
-    color: #444;
-    border-color: rgba(69,89,142,0.2);
-  }
-  .btn-cal-google:hover { border-color: var(--primary); color: var(--primary-dark); }
-
-  .btn-cal-apple {
-    background: #1C1C1E;
-    color: white;
-    border-color: #1C1C1E;
-  }
-  .btn-cal-apple:hover { background: #333; border-color: #333; }
-
   .btn-cal svg {
     width: 14px;
     height: 14px;
@@ -590,6 +615,165 @@
     50% { opacity: 1; transform: scale(1); }
   }
 
+  /* ====== MODAL LISTE INSCRITS ====== */
+  .overlay-list {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 43, 23, 0.6);
+    z-index: 150;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .overlay-list.active { display: flex; }
+
+  .modal-list {
+    background: var(--card-bg);
+    width: 480px;
+    max-width: 92vw;
+    max-height: 80vh;
+    border-radius: var(--radius);
+    box-shadow: 0 20px 50px rgba(0, 43, 23, 0.3);
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+
+  .modal-list-header {
+    padding: 2rem 2rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .modal-list-tag {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .modal-list-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    line-height: 1.3;
+    padding-right: 2.5rem;
+  }
+
+  .modal-list-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .modal-list-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(69, 89, 142, 0.08);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--primary-dark);
+    font-size: 22px;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .modal-list-close:hover { background: rgba(6, 132, 94, 0.15); color: var(--primary); }
+
+  .modal-list-body {
+    overflow-y: auto;
+    padding: 1.25rem 2rem 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-list-body::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .modal-list-body::-webkit-scrollbar-track {
+    background: rgba(69, 89, 142, 0.05);
+    border-radius: 3px;
+  }
+
+  .modal-list-body::-webkit-scrollbar-thumb {
+    background: rgba(6, 132, 94, 0.3);
+    border-radius: 3px;
+  }
+
+  .modal-list-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+
+  .modal-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--border);
+    background: rgba(69, 89, 142, 0.04);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-dark);
+  }
+
+  .modal-list-item.me {
+    border-left-color: var(--primary);
+    background: var(--bg-main);
+    font-weight: 600;
+  }
+
+  .modal-list-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 20px;
+    text-align: right;
+  }
+
+  .modal-list-footer {
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-close-list {
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid rgba(69, 89, 142, 0.2);
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+  }
+
+  .btn-close-list:hover { border-color: var(--primary-dark); color: var(--primary-dark); }
+
   /* RESPONSIVE */
   @media (max-width: 1200px) {
     .grid { grid-template-columns: repeat(2, 1fr); }
@@ -606,6 +790,10 @@
     .grid { grid-template-columns: 1fr; gap: 16px; }
     .modal { padding: 2rem 1.5rem; }
     .form-row { grid-template-columns: 1fr; gap: 12px; }
+    .modal-list { max-height: 90vh; }
+    .modal-list-body { padding: 1rem 1.25rem 1.5rem; }
+    .modal-list-header { padding: 1.5rem 1.25rem 1rem; }
+    .modal-list-footer { padding: 0.75rem 1.25rem; }
   }
 </style>
 </head>
@@ -617,13 +805,13 @@
 
 <header>
   <div class="logo"></div>
-  </header>
+</header>
 
 <main>
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- MODAL -->
+<!-- MODAL INSCRIPTION -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <button class="modal-close" id="btnClose" aria-label="Fermer">×</button>
@@ -666,10 +854,26 @@
       <p class="calendar-section-label">📅 Ajouter à mon calendrier</p>
       <div class="calendar-btns">
         <a class="btn-cal btn-cal-outlook" id="calOutlook" href="#" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.445 18.627 0 12 0S0 5.445 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" style="display:none"/><path d="M2 4h20v16H2V4zm9 2L4 11l1.5 1L11 8.5 17.5 12 19 11 11 6zM4 13v5h14v-5l-7 4-7-4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 4h20v16H2V4zm9 2L4 11l1.5 1L11 8.5 17.5 12 19 11 11 6zM4 13v5h14v-5l-7 4-7-4z"/></svg>
           Ajouter à Outlook
         </a>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LISTE INSCRITS -->
+<div class="overlay-list" id="overlayList" role="dialog" aria-modal="true" aria-labelledby="modalListTitle">
+  <div class="modal-list">
+    <div class="modal-list-header">
+      <button class="modal-list-close" id="btnCloseList" aria-label="Fermer">×</button>
+      <p class="modal-list-tag" id="listTag"></p>
+      <h2 class="modal-list-title" id="modalListTitle"></h2>
+      <p class="modal-list-subtitle" id="listSubtitle"></p>
+    </div>
+    <div class="modal-list-body" id="listBody"></div>
+    <div class="modal-list-footer">
+      <button class="btn-close-list" id="btnCloseList2">Fermer</button>
     </div>
   </div>
 </div>
@@ -678,7 +882,7 @@
 
 <script>
 // ============================================================
-// CONFIG SUPABASE — remplace ces deux valeurs
+// CONFIG SUPABASE
 // ============================================================
 const SUPABASE_URL = 'https://yojscwkfnuddouoqdnnh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvanNjd2tmbnVkZG91b3Fkbm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNjgzNDMsImV4cCI6MjA5MzY0NDM0M30.IFdq6Qff5URIQvbImGkMRzokfM93og_p8SaJ-P2j5W4';
@@ -687,9 +891,10 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const MAX_PREVIEW = 5; // Nombre d'inscrits affichés sur la carte
 
 // ============================================================
-// DONNÉES DES MEETINGS — modifie les dates/heures/lieux ici
+// DONNÉES DES MEETINGS
 // ============================================================
 const MEETINGS = [
   {
@@ -731,7 +936,7 @@ const MEETINGS = [
 ];
 // ============================================================
 
-let allInscrits = [];        // liste complète depuis Supabase
+let allInscrits = [];
 let currentMeetingId = null;
 let localUser = JSON.parse(localStorage.getItem('nw_user') || 'null');
 
@@ -761,19 +966,50 @@ function getInscritsForMeeting(meetingId) {
 function render() {
   const myMeetingId = getMyMeetingId();
   const grid = document.getElementById('grid');
-  grid.innerHTML = MEETINGS.map((m, i) => {
+
+  grid.innerHTML = MEETINGS.map((m) => {
     const inscrits = getInscritsForMeeting(m.id);
     const isRegistered = myMeetingId === m.id;
+    const isFull = inscrits.length >= m.capacite && !isRegistered;
+    const preview = inscrits.slice(-MAX_PREVIEW); // 5 derniers
 
-    const attendeeItems = inscrits.length === 0
-      ? `<p class="empty-msg">Aucun inscrit pour l'instant</p>`
-      : inscrits.map(a => {
-          const isMe = localUser && a.email === localUser.email;
-          return `<div class="attendee${isMe ? ' me' : ''}">${a.prenom} ${a.nom}${isMe ? ' (vous)' : ''}</div>`;
-        }).join('');
+    // Bloc inscrits preview
+    let attendeeItems = '';
+    if (inscrits.length === 0) {
+      attendeeItems = `<p class="empty-msg">Aucun inscrit pour l'instant</p>`;
+    } else {
+      attendeeItems = preview.map(a => {
+        const isMe = localUser && a.email === localUser.email;
+        return `<div class="attendee${isMe ? ' me' : ''}">${a.prenom} ${a.nom}${isMe ? ' <em style="font-weight:400;font-style:normal;opacity:0.7">(vous)</em>' : ''}</div>`;
+      }).join('');
+    }
+
+    // Bouton "Voir plus" si plus de MAX_PREVIEW inscrits
+    const voirPlusBtn = inscrits.length > MAX_PREVIEW
+      ? `<button class="btn-voir-plus" onclick="openListModal(${m.id})">Voir les ${inscrits.length} inscrits →</button>`
+      : (inscrits.length > 0 ? `<button class="btn-voir-plus" onclick="openListModal(${m.id})">Voir les ${inscrits.length} inscrit${inscrits.length > 1 ? 's' : ''} →</button>` : '');
+
+    // Bouton inscription
+    let btnLabel, btnClass, btnDisabled;
+    if (isRegistered) {
+      btnLabel = '✓ Inscrit(e) — modifier';
+      btnClass = 'btn-register registered';
+      btnDisabled = false;
+    } else if (isFull) {
+      btnLabel = 'Session complète';
+      btnClass = 'btn-register complet';
+      btnDisabled = true;
+    } else {
+      btnLabel = "S'inscrire →";
+      btnClass = 'btn-register';
+      btnDisabled = false;
+    }
+
+    // Badge capacité
+    const badgeClass = inscrits.length >= m.capacite ? 'count-badge full' : 'count-badge';
 
     return `
-    <div class="card">
+    <div class="card${isFull ? ' is-full' : ''}">
       <div>
         <p class="card-tag">${m.label}</p>
         <p class="card-title">${m.lieu}</p>
@@ -793,23 +1029,60 @@ function render() {
         </div>
       </div>
       <div class="divider"></div>
-      <p class="attendees-label">Inscrits <span class="count-badge"><span>${inscrits.length}</span>/${m.capacite}</span></p>
+      <p class="attendees-label">Inscrits <span class="${badgeClass}"><span>${inscrits.length}</span>/${m.capacite}</span></p>
       <div class="attendees-list">${attendeeItems}</div>
-      <button class="btn-register${isRegistered ? ' registered' : ''}" onclick="openModal(${m.id})">
-        ${isRegistered ? '✓ Inscrit(e) — modifier' : 'S\'inscrire →'}
+      ${voirPlusBtn}
+      <button class="${btnClass}" onclick="openModal(${m.id})" ${btnDisabled ? 'disabled' : ''}>
+        ${btnLabel}
       </button>
     </div>`;
   }).join('');
 }
 
-// --- MODAL ---
+// --- MODAL LISTE INSCRITS ---
+function openListModal(meetingId) {
+  const m = MEETINGS.find(x => x.id === meetingId);
+  const inscrits = getInscritsForMeeting(meetingId);
+
+  document.getElementById('listTag').textContent = m.label || 'Session';
+  document.getElementById('modalListTitle').textContent = `${m.lieu} — ${m.date}`;
+  document.getElementById('listSubtitle').textContent = `${inscrits.length} inscrit${inscrits.length > 1 ? 's' : ''} sur ${m.capacite} places`;
+
+  const body = document.getElementById('listBody');
+  if (inscrits.length === 0) {
+    body.innerHTML = `<p class="empty-msg">Aucun inscrit pour l'instant.</p>`;
+  } else {
+    body.innerHTML = inscrits.map((a, i) => {
+      const isMe = localUser && a.email === localUser.email;
+      return `
+      <div class="modal-list-item${isMe ? ' me' : ''}">
+        <span class="modal-list-num">${i + 1}</span>
+        <span>${a.prenom} ${a.nom}${isMe ? ' <em style="font-weight:400;font-style:normal;opacity:0.7">(vous)</em>' : ''}</span>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('overlayList').classList.add('active');
+}
+
+function closeListModal() {
+  document.getElementById('overlayList').classList.remove('active');
+}
+
+document.getElementById('btnCloseList').onclick = closeListModal;
+document.getElementById('btnCloseList2').onclick = closeListModal;
+document.getElementById('overlayList').onclick = function(e) {
+  if (e.target === this) closeListModal();
+};
+
+// --- MODAL INSCRIPTION ---
 function openModal(meetingId) {
   currentMeetingId = meetingId;
   const m = MEETINGS.find(x => x.id === meetingId);
   const myMeetingId = getMyMeetingId();
 
   document.getElementById('modalTag').textContent = m.label;
-  document.getElementById('modalTitle').textContent = 'S\'inscrire à la session';
+  document.getElementById('modalTitle').textContent = "S'inscrire à la session";
   document.getElementById('modalInfoTitle').textContent = `${m.lieu} — ${m.date}`;
   document.getElementById('modalInfoDetails').textContent = `${m.heure} · ${m.adresse}`;
   document.getElementById('errMsg').style.display = 'none';
@@ -838,7 +1111,7 @@ function openModal(meetingId) {
       switchNotice.style.display = 'block';
       btnConfirm.textContent = 'Confirmer le changement';
     } else {
-      btnConfirm.textContent = 'Confirmer l\'inscription';
+      btnConfirm.textContent = "Confirmer l'inscription";
     }
   } else {
     formFields.style.display = 'block';
@@ -846,7 +1119,7 @@ function openModal(meetingId) {
     document.getElementById('inpPrenom').value = '';
     document.getElementById('inpNom').value = '';
     document.getElementById('inpEmail').value = '';
-    btnConfirm.textContent = 'Confirmer l\'inscription';
+    btnConfirm.textContent = "Confirmer l'inscription";
   }
 
   document.getElementById('overlay').classList.add('active');
@@ -859,7 +1132,12 @@ document.getElementById('overlay').onclick = function(e) {
   if (e.target === this) closeModal();
 };
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeListModal();
+  }
+});
 
 // --- CONFIRM ---
 document.getElementById('btnConfirm').onclick = async function() {
@@ -867,12 +1145,10 @@ document.getElementById('btnConfirm').onclick = async function() {
   btn.disabled = true;
   btn.textContent = 'En cours…';
 
-  const errEl = document.getElementById('errMsg');
   const myMeetingId = getMyMeetingId();
 
   try {
     if (!localUser) {
-      // Nouveau visiteur
       const prenom = document.getElementById('inpPrenom').value.trim();
       const nom = document.getElementById('inpNom').value.trim();
       const email = document.getElementById('inpEmail').value.trim().toLowerCase();
@@ -880,12 +1156,20 @@ document.getElementById('btnConfirm').onclick = async function() {
       if (!prenom || !nom || !email) { showError('Merci de remplir tous les champs.'); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Adresse email invalide.'); return; }
 
+      // Vérification capacité
+      const inscrits = getInscritsForMeeting(currentMeetingId);
+      const m = MEETINGS.find(x => x.id === currentMeetingId);
+      if (inscrits.length >= m.capacite) {
+        showError('Cette session est complète. Impossible de s\'inscrire.');
+        return;
+      }
+
       const alreadyInMeeting = allInscrits.find(a => a.email === email && a.meeting_id === currentMeetingId);
       if (alreadyInMeeting) { showError('Cet email est déjà inscrit à cette session.'); return; }
 
       const { error } = await db.from('inscriptions').insert({ prenom, nom, email, meeting_id: currentMeetingId });
       if (error) {
-        showError(error.code === '23505' ? 'Cet email est déjà inscrit à une autre session. Rafraîchissez la page.' : 'Erreur lors de l\'inscription. Réessayez.');
+        showError(error.code === '23505' ? 'Cet email est déjà inscrit à une autre session. Rafraîchissez la page.' : "Erreur lors de l'inscription. Réessayez.");
         return;
       }
 
@@ -904,7 +1188,14 @@ document.getElementById('btnConfirm').onclick = async function() {
       showToast('Vous avez été désinscrit(e).');
 
     } else {
-      // Changement ou nouvelle inscription (user connu)
+      // Vérification capacité pour changement
+      const inscrits = getInscritsForMeeting(currentMeetingId);
+      const m = MEETINGS.find(x => x.id === currentMeetingId);
+      if (inscrits.length >= m.capacite) {
+        showError('Cette session est complète. Impossible de s\'y inscrire.');
+        return;
+      }
+
       if (myMeetingId) await db.from('inscriptions').delete().eq('email', localUser.email);
       const { error } = await db.from('inscriptions').insert({
         prenom: localUser.prenom,
@@ -912,8 +1203,8 @@ document.getElementById('btnConfirm').onclick = async function() {
         email: localUser.email,
         meeting_id: currentMeetingId
       });
-      if (error) { showError('Erreur lors de l\'inscription.'); return; }
-      showToast(`✓ Inscription confirmée !`);
+      if (error) { showError("Erreur lors de l'inscription."); return; }
+      showToast('✓ Inscription confirmée !');
       await loadInscrits();
       render();
       openModalCalendrier(currentMeetingId);
@@ -931,15 +1222,13 @@ document.getElementById('btnConfirm').onclick = async function() {
 };
 
 // --- CALENDRIER ---
-// Convertit "Mardi 10 juin 2026" + "13h30" en format ICS : 20260610T133000
 function parseDateToICS(dateStr, heureStr) {
   const months = {
     'janvier':1,'février':2,'mars':3,'avril':4,'mai':5,'juin':6,
     'juillet':7,'août':8,'septembre':9,'octobre':10,'novembre':11,'décembre':12
   };
-  // Retire les ordinaux et préfixes (Mardi, 1er, etc.)
   const clean = dateStr.toLowerCase().replace(/1er/g,'1').replace(/^[a-zé]+\s+/,'');
-  const parts = clean.trim().split(/\s+/); // ['10', 'juin', '2026']
+  const parts = clean.trim().split(/\s+/);
   const day = String(parseInt(parts[0])).padStart(2,'0');
   const month = String(months[parts[1]] || 1).padStart(2,'0');
   const year = parts[2] || '2026';
@@ -951,38 +1240,16 @@ function parseDateToICS(dateStr, heureStr) {
 
 function buildOutlookUrl(meeting) {
   const { date, time } = parseDateToICS(meeting.date, meeting.heure);
-
   const endHour = String(parseInt(time.substring(0,2)) + 2).padStart(2,'0');
   const endTime = `${endHour}${time.substring(2)}`;
-
   const start = `${date}T${time}`;
   const end   = `${date}T${endTime}`;
-
   const title = encodeURIComponent(`Session Networking Advisory — ${meeting.label}`);
-
   const location = encodeURIComponent(meeting.adresse);
-
-  const body = encodeURIComponent(
-    `Session de networking Advisory\n\nLieu : ${meeting.lieu}`
-  );
-
+  const body = encodeURIComponent(`Session de networking Advisory\n\nLieu : ${meeting.lieu}`);
   return `https://outlook.office.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${title}&startdt=${start}&enddt=${end}&location=${location}&body=${body}`;
 }
 
-
-function buildGoogleUrl(meeting) {
-  const { date, time } = parseDateToICS(meeting.date, meeting.heure);
-  const endHour = String(parseInt(time.substring(0,2)) + 2).padStart(2,'0');
-  const endTime = `${endHour}${time.substring(2)}`;
-  const start = `${date}T${time}`;
-  const end   = `${date}T${endTime}`;
-  const title = encodeURIComponent(`Session Networking Advisory — ${meeting.label}`);
-  const loc   = encodeURIComponent(meeting.adresse);
-  const details = encodeURIComponent(`Session de networking Advisory\nLieu : ${meeting.lieu}`);
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&location=${loc}&details=${details}`;
-}
-
-// Ouvre la modale en mode "confirmation + calendrier" après inscription réussie
 function openModalCalendrier(meetingId) {
   const m = MEETINGS.find(x => x.id === meetingId);
   document.getElementById('modalTag').textContent = m.label;
@@ -999,7 +1266,6 @@ function openModalCalendrier(meetingId) {
   document.getElementById('overlay').classList.add('active');
 }
 
-// Remet le bouton Confirmer visible quand on ferme
 function closeModal() {
   document.getElementById('overlay').classList.remove('active');
   document.getElementById('btnConfirm').style.display = '';
@@ -1010,12 +1276,9 @@ function closeModal() {
 function showCalendarButtons(meetingId) {
   const m = MEETINGS.find(x => x.id === meetingId);
   if (!m) return;
-
   document.getElementById('calOutlook').href = buildOutlookUrl(m);
-
   document.getElementById('calendarSection').style.display = 'block';
 }
-
 
 function hideCalendarButtons() {
   document.getElementById('calendarSection').style.display = 'none';
@@ -1026,7 +1289,7 @@ function showError(msg) {
   el.textContent = msg;
   el.style.display = 'block';
   document.getElementById('btnConfirm').disabled = false;
-  document.getElementById('btnConfirm').textContent = 'Confirmer l\'inscription';
+  document.getElementById('btnConfirm').textContent = "Confirmer l'inscription";
 }
 
 function showToast(msg) {
