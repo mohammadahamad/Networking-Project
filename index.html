@@ -698,7 +698,8 @@ const MEETINGS = [
     lieu: 'Chez VALMEN',
     adresse: '9 Rue Portalis, 75008 Paris',
     date: 'Jeudi 11 juin 2026',
-    heure: '19h00'
+    heure: '19h00',
+    capacite: 40
   },
   {
     id: 2,
@@ -706,7 +707,8 @@ const MEETINGS = [
     lieu: 'Chez AILANCY',
     adresse: '32 Rue de Ponthieu, 75008 Paris',
     date: 'Mardi 16 juin 2026',
-    heure: '19h00'
+    heure: '19h00',
+    capacite: 90
   },
   {
     id: 3,
@@ -714,7 +716,8 @@ const MEETINGS = [
     lieu: 'Chez AILANCY',
     adresse: '32 Rue de Ponthieu, 75008 Paris',
     date: 'Jeudi 25 juin 2026',
-    heure: '19h00'
+    heure: '19h00',
+    capacite: 90
   },
   {
     id: 4,
@@ -722,7 +725,8 @@ const MEETINGS = [
     lieu: 'Chez VALMEN',
     adresse: '9 Rue Portalis, 75008 Paris',
     date: 'Mardi 30 juin 2026',
-    heure: '19h00'
+    heure: '19h00',
+    capacite: 40
   }
 ];
 // ============================================================
@@ -789,7 +793,7 @@ function render() {
         </div>
       </div>
       <div class="divider"></div>
-      <p class="attendees-label">Inscrits <span class="count-badge">(<span>${inscrits.length}</span>)</span></p>
+      <p class="attendees-label">Inscrits <span class="count-badge"><span>${inscrits.length}</span>/${m.capacite}</span></p>
       <div class="attendees-list">${attendeeItems}</div>
       <button class="btn-register${isRegistered ? ' registered' : ''}" onclick="openModal(${m.id})">
         ${isRegistered ? '✓ Inscrit(e) — modifier' : 'S\'inscrire →'}
