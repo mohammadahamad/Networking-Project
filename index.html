@@ -850,15 +850,6 @@
     </div>
 
     <!-- CALENDRIER — affiché après inscription -->
-    <div class="calendar-section" id="calendarSection" style="display:none">
-      <p class="calendar-section-label">📅 Ajouter à mon calendrier</p>
-      <div class="calendar-btns">
-        <a class="btn-cal btn-cal-outlook" id="calOutlook" href="#" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 4h20v16H2V4zm9 2L4 11l1.5 1L11 8.5 17.5 12 19 11 11 6zM4 13v5h14v-5l-7 4-7-4z"/></svg>
-          Ajouter à Outlook
-        </a>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1244,7 +1235,7 @@ function buildOutlookUrl(meeting) {
   const endTime = `${endHour}${time.substring(2)}`;
   const start = `${date}T${time}`;
   const end   = `${date}T${endTime}`;
-  const title = encodeURIComponent(`Session Networking Advisory — ${meeting.label}`);
+  const title = encodeURIComponent(`Session Networking Ailancy x Valmen ${meeting.label}`);
   const location = encodeURIComponent(meeting.adresse);
   const body = encodeURIComponent(`Session de networking Advisory\n\nLieu : ${meeting.lieu}`);
   return `https://outlook.office.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${title}&startdt=${start}&enddt=${end}&location=${location}&body=${body}`;
