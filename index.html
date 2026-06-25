@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sessions Networking — Advisory</title>
+<title>Sessions Networking — Ailancy x Valmen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1085,7 +1085,6 @@ function openModal(meetingId) {
   const btnConfirm = document.getElementById('btnConfirm');
 
   switchNotice.style.display = 'none';
-  hideCalendarButtons();
 
   if (localUser) {
     formFields.style.display = 'none';
@@ -1169,7 +1168,7 @@ document.getElementById('btnConfirm').onclick = async function() {
       showToast(`✓ ${prenom}, vous êtes inscrit(e) !`);
       await loadInscrits();
       render();
-      openModalCalendrier(currentMeetingId);
+      closeModal();
       return;
 
     } else if (myMeetingId === currentMeetingId) {
@@ -1198,7 +1197,7 @@ document.getElementById('btnConfirm').onclick = async function() {
       showToast('✓ Inscription confirmée !');
       await loadInscrits();
       render();
-      openModalCalendrier(currentMeetingId);
+      closeModal();
       return;
     }
 
@@ -1212,68 +1211,6 @@ document.getElementById('btnConfirm').onclick = async function() {
   }
 };
 
-// --- CALENDRIER ---
-function parseDateToICS(dateStr, heureStr) {
-  const months = {
-    'janvier':1,'février':2,'mars':3,'avril':4,'mai':5,'juin':6,
-    'juillet':7,'août':8,'septembre':9,'octobre':10,'novembre':11,'décembre':12
-  };
-  const clean = dateStr.toLowerCase().replace(/1er/g,'1').replace(/^[a-zé]+\s+/,'');
-  const parts = clean.trim().split(/\s+/);
-  const day = String(parseInt(parts[0])).padStart(2,'0');
-  const month = String(months[parts[1]] || 1).padStart(2,'0');
-  const year = parts[2] || '2026';
-  const [h, m] = heureStr.replace('h',':').split(':');
-  const hh = String(parseInt(h)).padStart(2,'0');
-  const mm = String(parseInt(m||0)).padStart(2,'0');
-  return { date: `${year}${month}${day}`, time: `${hh}${mm}00` };
-}
-
-function buildOutlookUrl(meeting) {
-  const { date, time } = parseDateToICS(meeting.date, meeting.heure);
-  const endHour = String(parseInt(time.substring(0,2)) + 2).padStart(2,'0');
-  const endTime = `${endHour}${time.substring(2)}`;
-  const start = `${date}T${time}`;
-  const end   = `${date}T${endTime}`;
-  const title = encodeURIComponent(`Session Networking Ailancy x Valmen ${meeting.label}`);
-  const location = encodeURIComponent(meeting.adresse);
-  const body = encodeURIComponent(`Session de networking Advisory\n\nLieu : ${meeting.lieu}`);
-  return `https://outlook.office.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${title}&startdt=${start}&enddt=${end}&location=${location}&body=${body}`;
-}
-
-function openModalCalendrier(meetingId) {
-  const m = MEETINGS.find(x => x.id === meetingId);
-  document.getElementById('modalTag').textContent = m.label;
-  document.getElementById('modalTitle').textContent = '✓ Inscription confirmée !';
-  document.getElementById('modalInfoTitle').textContent = `${m.lieu} — ${m.date}`;
-  document.getElementById('modalInfoDetails').textContent = `${m.heure} · ${m.adresse}`;
-  document.getElementById('formFields').style.display = 'none';
-  document.getElementById('confirmIdentity').style.display = 'none';
-  document.getElementById('switchNotice').style.display = 'none';
-  document.getElementById('errMsg').style.display = 'none';
-  document.getElementById('btnConfirm').style.display = 'none';
-  document.getElementById('btnCancelModal').textContent = 'Fermer';
-  showCalendarButtons(meetingId);
-  document.getElementById('overlay').classList.add('active');
-}
-
-function closeModal() {
-  document.getElementById('overlay').classList.remove('active');
-  document.getElementById('btnConfirm').style.display = '';
-  document.getElementById('btnCancelModal').textContent = 'Annuler';
-  currentMeetingId = null;
-}
-
-function showCalendarButtons(meetingId) {
-  const m = MEETINGS.find(x => x.id === meetingId);
-  if (!m) return;
-  document.getElementById('calOutlook').href = buildOutlookUrl(m);
-  document.getElementById('calendarSection').style.display = 'block';
-}
-
-function hideCalendarButtons() {
-  document.getElementById('calendarSection').style.display = 'none';
-}
 
 function showError(msg) {
   const el = document.getElementById('errMsg');
