@@ -298,6 +298,50 @@
     background: rgba(176, 58, 46, 0.05);
   }
 
+  /* ====== SECTION CONTACT ====== */  
+  .contact-section {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 1.25rem 2rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(69, 89, 142, 0.12);
+    border-radius: var(--radius);
+    backdrop-filter: blur(4px);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }  
+  
+  .contact-section svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    stroke: var(--primary);
+  }  
+  
+  .contact-section p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+  }  
+  
+  .contact-section a {
+    color: var(--primary);
+    font-weight: 700; 
+    text-decoration: none;
+    border-bottom: 1px solid rgba(6, 132, 94, 0.3); 
+    transition: border-color 0.2s, color 0.2s;
+  }  
+  
+  .contact-section a:hover {
+    color: var(--primary-dark);
+    border-bottom-color: var(--primary-dark);
+  }
+
   /* ====== OVERLAY GÉNÉRIQUE ====== */
   .overlay {
     display: none;
@@ -754,6 +798,15 @@
 
 <main>
   <div class="grid" id="grid"></div>
+
+    <!-- SECTION CONTACT -->  
+  <div class="contact-section">    
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">      
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>    </svg>    
+    <p>Pour toute demande, veuillez contacter 
+      <a href="mailto:ahamad.mohammad@ailancy.com">ahamad.mohammad@ailancy.com</a>
+    </p>  
+  </div>
 </main>
 
 <!-- MODAL INSCRIPTION -->
